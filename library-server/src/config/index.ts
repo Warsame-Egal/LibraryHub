@@ -16,12 +16,16 @@ const MONGO_URL: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localho
 // Retrieve the server port from environment variables, default to 8000 if not set
 const PORT: number = process.env.SECRET_PORT ? Number(process.env.SERVER_PORT) : 8000;
 
+// Retrieve the number of rounds for password hashing, default to a random number between 0 and 10 if not set
+const ROUNDS: number = process.env.SERVER_ROUNDS ? Number(process.env.SERVER_ROUNDS) : Math.floor(Math.random() * 11);
+
 // Export the configuration object containing MongoDB URL and server port
 export const config = {
     mongo: {
         url: MONGO_URL
     },
     server: {
-        port: PORT
+        port: PORT,
+        rounds: ROUNDS
     }
 };

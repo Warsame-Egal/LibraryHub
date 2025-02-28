@@ -8,6 +8,7 @@ import { config } from '../config';
 import UserDao, { IUserModel } from '../daos/UserDao';
 // Import IUser interface
 import { IUser } from '../models/User';
+import { UnableToSaveUserError, InvalidUserNameOrPasswordError } from '../utils/LibraryErrors';
 
 // Register a new user
 export async function register(user: IUser): Promise<IUserModel> {
@@ -24,6 +25,33 @@ export async function register(user: IUser): Promise<IUserModel> {
         return await saved.save();
     } catch (error: any) {
         // Throw an error if user creation fails
-        throw new Error("Unable to create user at this time");
+        throw new UnableToSaveUserError(error);
+    }
+}
+
+// Authenticate a user
+export async function login(credentials: { email: string, password: string }): Promise<IUserModel> {
+    const { email, password } = credentials;
+
+    try {
+        // Find the user by email
+        const user = await UserDao.findOne({ email });
+
+        if (!user) {
+            throw new InvalidUserNameOrPasswordError("Invalid username or password");
+        }
+
+        // Compare the provided password with the stored hashed password
+        const validPassword: boolean = await bcrypt.compare(password, user.password);
+
+        if (validPassword) {
+            return user;
+        } else {
+            throw new InvalidUserNameOrPasswordError("Invalid username or password");
+        }
+
+    } catch (error: any) {
+        // Throw an error if authentication fails
+        throw error;
     }
 }

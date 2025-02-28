@@ -11,7 +11,9 @@ const MONGO_USERNAME: string = process.env.MONGO_USERNAME || '';
 const MONGO_PASSWORD: string = process.env.MONGO_PASSWORD || '';
 
 // Construct the MongoDB connection URL using the retrieved username and password
-const MONGO_URL: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:27017/masterlibrarydb?authSource=masterlibrarydb&directConnection=true`;
+const MONGO_URL: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:27017/masterlibrarydb`;
+//const MONGO_URL: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:27017/masterlibrarydb?authSource=masterlibrarydb&directConnection=true`;
+
 
 // Retrieve the server port from environment variables, default to 8000 if not set
 const PORT: number = process.env.SECRET_PORT ? Number(process.env.SERVER_PORT) : 8000;
